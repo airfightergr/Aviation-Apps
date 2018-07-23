@@ -33,14 +33,14 @@ function scene:create( event )
 	title:setFillColor(0,0,0)
 	sceneGroup:insert(title)
 
-	buttonConversions = display.newRoundedRect(display.contentCenterX, display.contentCenterY,
+	buttonConversions = display.newRoundedRect(display.contentCenterX, display.contentCenterY*0.7,
 											display.contentWidth*0.5, display.contentHeight*0.075, 15 )
-	buttonConversions:setFillColor(0,0,1)
+	buttonConversions:setFillColor(0.3,0.5,0.3)
 	sceneGroup:insert(buttonConversions)
 
 buttonConversions:addEventListener("tap", changeScenes)
 
-buttonConversionsLabel = display.newText( "Conversions",  display.contentCenterX, display.contentCenterY, native.newFont( "Helvetica" ,30 ))
+buttonConversionsLabel = display.newText( "Conversions",  display.contentCenterX, display.contentCenterY*0.7, native.newFont( "Helvetica" ,30 ))
 sceneGroup:insert(buttonConversionsLabel)
 end
 

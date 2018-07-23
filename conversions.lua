@@ -9,7 +9,7 @@ local scene = composer.newScene()
 -- -----------------------------------------------------------------------------------
 local bg
 local title
-local button
+local buttonMenu
 
 local function changeScenes()
 composer.gotoScene( "intro", {effect = "slideRight", time = 500} )
@@ -27,7 +27,7 @@ function scene:create( event )
 	bg:setFillColor(0.3,0.5,0.3)
 	sceneGroup:insert(bg)
 	--App title
-	title = display.newText( "Aviator's Companion", display.contentCenterX, display.contentCenterY * 0.075, native.newFont( "Helvetica-Bold" ,40 ))
+	title = display.newText( "CONVERTIONS", display.contentCenterX, display.contentCenterY * 0.075, native.newFont( "Helvetica-Bold" ,40 ))
 	sceneGroup:insert(title)
 	----------------------------------------------------------------------------------------------------------------------------
 	-- Bottom time display
@@ -177,6 +177,15 @@ sceneGroup:insert(arptID)
 
 	webView:addEventListener( "urlRequest", webListener )
 sceneGroup:insert(webView)
+
+buttonMenu = display.newRoundedRect(display.contentCenterX, display.contentCenterY*1.9,
+										display.contentWidth*0.5, display.contentHeight*0.075, 15 )
+buttonMenu:setFillColor(0,0,1)
+sceneGroup:insert(buttonMenu)
+buttonMenu:addEventListener("tap", changeScenes)
+
+buttonConversionsLabel = display.newText( "Return to Menu",  display.contentCenterX, display.contentCenterY*1.9, native.newFont( "Helvetica" ,30 ))
+sceneGroup:insert(buttonConversionsLabel)
 
 
 end
