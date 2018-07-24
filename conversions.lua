@@ -12,7 +12,8 @@ local title
 local buttonMenu
 
 local function changeScenes()
-composer.gotoScene( "intro", {effect = "slideRight", time = 500} )
+composer.gotoScene( "menu", {effect = "slideRight", time = 500} )
+print("Scene --> Menu")
 end
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
@@ -120,63 +121,12 @@ function scene:create( event )
 	inHg_tf.inputType = "phone"       --Set the type to only numbers. Should popup numaric keyboard
 	inHg_tf:addEventListener( "userInput", inHg_tfListener )    --Register the listener
 sceneGroup:insert(inHg_tf)
-	----------------------------------------------------------------------------------------------------------------------------
-	--METAR SECTION
-	----------------------------------------------------------------------------------------------------------------------------
-	--METAR section title
-	local metarTitle = display.newText( "METAR parser",
-	                    display.contentCenterX, display.contentCenterY , native.newFont( "Helvetica-Bold" ,30 ))
-sceneGroup:insert(metarTitle)
-	--Input label title
-	local arptID_label = display.newText( "Enter Airport ICAO code", display.contentCenterX, display.contentCenterY * 1.15,
-	                    native.newFont( "Helvetica-Bold" ,25 ))
-sceneGroup:insert(arptID_label)
-	local arptID --Init newTextField for entering the airport's ICAO code to search for METAR
 
-	--Here we must print out the specific METAR
-	local metarText = display.newText( "METAR will be displayed here", display.contentCenterX, display.contentCenterY * 1.35,
-	                    native.systemFont,25)
-sceneGroup:insert(metarText)
-	-- Function to listen the Textfield
-	local function arptIDListener( event )
-
-	    if ( event.phase == "began" ) then      -- User begins editing "defaultField"
-
-	    elseif ( event.phase == "ended" or event.phase == "submitted" ) then    ---Enter (or what else) pressed
-	        -- event.target.text is the Output resulting text from "defaultField"
-	        print( event.target.text )
-	        metarText.text = event.target.text
-
-	    elseif ( event.phase == "editing" ) then
-	        print( event.newCharacters )
-	        print( event.oldText )
-	        print( event.startPosition )
-	        print( event.text )
-	    end
-	end
-	----Airport METAR
-	arptID = native.newTextField( display.contentCenterX, display.contentCenterY*1.25, 100, 40 )
-	arptID:addEventListener( "userInput", arptIDListener )
-sceneGroup:insert(arptID)
-
-	local zuluTime = tonumber(os.date( "%H" )) - tonumber( os.date("%z")/100)  --Get ZULU TIME
-	  if zuluTime < 0 then zuluTime = zuluTime + 24 end           --if ZULU TIME is negative, add 24 to fix it.
-	local timeMetar = string.format("%02s" .. "Z.TXT", zuluTime)
-	local urlMetar = 'http://tgftp.nws.noaa.gov/data/observations/metar/cycles/'..timeMetar
-
-	local function webListener( event )
-	    if ( event.url ) then
-	        print( "You are visiting: " .. event.url )
-	        print("Number or records: " .. #urlMetar)
-
-	    end
-	end
-
-	local webView = native.newWebView( display.contentCenterX, display.contentCenterY*1.6, 500, 150 )
-	webView:request( urlMetar )
-
-	webView:addEventListener( "urlRequest", webListener )
-sceneGroup:insert(webView)
+-- 	local webView = native.newWebView( display.contentCenterX, display.contentCenterY*1.6, 500, 150 )
+-- 	webView:request( urlMetar )
+--
+-- 	webView:addEventListener( "urlRequest", webListener )
+-- sceneGroup:insert(webView)
 
 buttonMenu = display.newRoundedRect(display.contentCenterX, display.contentCenterY*1.9,
 										display.contentWidth*0.5, display.contentHeight*0.075, 15 )
@@ -186,6 +136,14 @@ buttonMenu:addEventListener("tap", changeScenes)
 
 buttonConversionsLabel = display.newText( "Return to Menu",  display.contentCenterX, display.contentCenterY*1.9, native.newFont( "Helvetica" ,30 ))
 sceneGroup:insert(buttonConversionsLabel)
+
+
+
+
+
+
+
+
 
 
 end

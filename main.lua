@@ -9,7 +9,7 @@
 local assets = require('assets')
 local widget = require('widget')
 local composer = require( "composer" )
-composer.gotoScene("intro", {effect = "fade", time = 500} )
+composer.gotoScene("menu", {effect = "fade", time = 500} )
 
 -- Seed the random number generator. If we are going to use and math.random()
 -- ensures everytime to start the app with a new number

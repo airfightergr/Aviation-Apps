@@ -1,3 +1,8 @@
+-- Load the relevant LuaSocket modules
+local http = require( "socket.http" )
+local ltn12 = require( "ltn12" )
+
+
 
 local composer = require( "composer" )
 
@@ -11,9 +16,21 @@ local bg
 local title
 local buttonConversions
 local buttonConversionsLabel
+local buttonWeather
+local buttonWeatherLabel
 
-local function changeScenes()
+-- local function changeScenes()
+-- composer.gotoScene( "weather", {effect = "slideLeft", time = 500} )
+-- end
+
+local function gotoConversions()
 composer.gotoScene( "conversions", {effect = "slideLeft", time = 500} )
+print("Scene --> Conversions")
+end
+
+local function gotoWeather()
+composer.gotoScene( "weather", {effect = "slideLeft", time = 500} )
+print("Scene --> weather")
 end
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
@@ -33,15 +50,28 @@ function scene:create( event )
 	title:setFillColor(0,0,0)
 	sceneGroup:insert(title)
 
-	buttonConversions = display.newRoundedRect(display.contentCenterX, display.contentCenterY*0.7,
+	buttonConversions = display.newRoundedRect(display.contentCenterX, display.contentCenterY*0.6,
 											display.contentWidth*0.5, display.contentHeight*0.075, 15 )
 	buttonConversions:setFillColor(0.3,0.5,0.3)
 	sceneGroup:insert(buttonConversions)
 
-buttonConversions:addEventListener("tap", changeScenes)
+	buttonConversions:addEventListener("tap", gotoConversions)
 
-buttonConversionsLabel = display.newText( "Conversions",  display.contentCenterX, display.contentCenterY*0.7, native.newFont( "Helvetica" ,30 ))
-sceneGroup:insert(buttonConversionsLabel)
+	buttonConversionsLabel = display.newText( "Conversions",  display.contentCenterX, display.contentCenterY*0.6, native.newFont( "Helvetica" ,30 ))
+	sceneGroup:insert(buttonConversionsLabel)
+
+	buttonWeather = display.newRoundedRect(display.contentCenterX, display.contentCenterY*0.8,
+											display.contentWidth*0.5, display.contentHeight*0.075, 15 )
+	buttonWeather:setFillColor(0.3,0.3,0.5)
+	sceneGroup:insert(buttonWeather)
+
+	buttonWeatherLabel = display.newText( "Weather",  display.contentCenterX, display.contentCenterY*0.8, native.newFont( "Helvetica" ,30 ))
+	sceneGroup:insert(buttonWeatherLabel)
+	buttonWeather:addEventListener("tap", gotoWeather)
+--------------------------------------------------------------------------------
+--TESTS
+--------------------------------------------------------------------------------
+
 end
 
 
