@@ -13,7 +13,7 @@ local buttonMenu
 
 local function changeScenes()
 composer.gotoScene( "menu", {effect = "slideRight", time = 500} )
-print("Scene --> Menu")
+print("Scene --> Conversions")
 end
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
@@ -85,7 +85,7 @@ function scene:create( event )
 	end
 	--Create the Textfield itself
 	hPa_tf = native.newTextField( display.contentCenterX * 0.5, display.contentCenterY * 0.55, 100, 40 )
-	hPa_tf.inputType = "phone"       --Set the type to only numbers. Should popup numaric keyboard
+	hPa_tf.inputType = "decimal"       --Set the type to only numbers. Should popup numaric keyboard
 	hPa_tf:addEventListener( "userInput", hPa_tfListener )    --Register the listener
 	sceneGroup:insert(hPa_tf)
 	----------------------------------------------------------------------------------------------------------------------------
@@ -146,7 +146,7 @@ sceneGroup:insert(buttonConversionsLabel)
 
 
 
-end
+end	--scene:create
 
 
 -- show()

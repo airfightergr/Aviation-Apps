@@ -18,6 +18,8 @@ local buttonConversions
 local buttonConversionsLabel
 local buttonWeather
 local buttonWeatherLabel
+local buttonMovingMap
+local buttonMovingMapLabel
 
 -- local function changeScenes()
 -- composer.gotoScene( "weather", {effect = "slideLeft", time = 500} )
@@ -31,6 +33,11 @@ end
 local function gotoWeather()
 composer.gotoScene( "weather", {effect = "slideLeft", time = 500} )
 print("Scene --> weather")
+end
+
+local function gotoMovingMap()
+composer.gotoScene( "movingMap", {effect = "slideLeft", time = 500} )
+print("Scene --> movingMap")
 end
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
@@ -68,6 +75,16 @@ function scene:create( event )
 	buttonWeatherLabel = display.newText( "Weather",  display.contentCenterX, display.contentCenterY*0.8, native.newFont( "Helvetica" ,30 ))
 	sceneGroup:insert(buttonWeatherLabel)
 	buttonWeather:addEventListener("tap", gotoWeather)
+
+
+	buttonMovingMap = display.newRoundedRect(display.contentCenterX, display.contentCenterY*1.5,
+											display.contentWidth*0.5, display.contentHeight*0.075, 15 )
+	buttonMovingMap:setFillColor(0.5,0.3,0.3)
+	sceneGroup:insert(buttonMovingMap)
+
+	buttonMovingMapLabel = display.newText( "Moving Map",  display.contentCenterX, display.contentCenterY*1.5, native.newFont( "Helvetica" ,30 ))
+	sceneGroup:insert(buttonMovingMapLabel)
+	buttonMovingMap:addEventListener("tap", gotoMovingMap)
 --------------------------------------------------------------------------------
 --TESTS
 --------------------------------------------------------------------------------
