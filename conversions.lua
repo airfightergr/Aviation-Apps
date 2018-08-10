@@ -41,7 +41,7 @@ function scene:create( event )
 	local hourUTC = tonumber(os.date( "%H" )) - tonumber( os.date("%z")/100)
 	if hourUTC < 0 then hourUTC = hourUTC + 24 end
 	--Put the values to the UTC_time text
-	UTC_time.text = string.format( "TIME NOW: %d:%sZ / %s:%s Local", hourUTC, os.date("%M"),os.date("%H"),os.date("%M"))
+	UTC_time.text = string.format( "TIME NOW: %02d:%sZ / %s:%s Local", hourUTC, os.date("%M"),os.date("%H"),os.date("%M"))
 
 	end
 
@@ -85,7 +85,7 @@ function scene:create( event )
 	end
 	--Create the Textfield itself
 	hPa_tf = native.newTextField( display.contentCenterX * 0.5, display.contentCenterY * 0.55, 100, 40 )
-	hPa_tf.inputType = "decimal"       --Set the type to only numbers. Should popup numaric keyboard
+	hPa_tf.inputType = "number"       --Set the type to only numbers. Should popup numaric keyboard
 	hPa_tf:addEventListener( "userInput", hPa_tfListener )    --Register the listener
 	sceneGroup:insert(hPa_tf)
 	----------------------------------------------------------------------------------------------------------------------------
@@ -173,7 +173,8 @@ function scene:hide( event )
 
 	if ( phase == "will" ) then
 		-- Code here runs when the scene is on screen (but is about to go off screen)
-
+		composer.removeScene("conversions")
+		print("Scene conversions removed")
 	elseif ( phase == "did" ) then
 		-- Code here runs immediately after the scene goes entirely off screen
 

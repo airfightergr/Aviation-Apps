@@ -75,7 +75,7 @@ if latitude.text ~= nil and longitude.text ~= nil then	--we must get coordinates
 end
 else funcFlag = false
 end
-end
+end --drawMap
 timer.performWithDelay( 1000, drawMap, 1 )  -- 1 here means that will run once.
 
 

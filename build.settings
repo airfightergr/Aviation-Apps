@@ -20,7 +20,7 @@ settings =
 	{
 		usesPermissions =
 		{
-			"android.permission.INTERNET",
+						"android.permission.INTERNET",
             -- Permission to retrieve current location from the GPS
             "android.permission.ACCESS_FINE_LOCATION",
             -- Permission to retrieve current location from WiFi or cellular service
