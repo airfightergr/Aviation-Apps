@@ -14,6 +14,7 @@ local percText = ""
 local weatherAlertText = ""
 local weatherAlert
 
+local keyFocus = 0
 
 
 local function networkListener( event )   ---Now we need this to display the download progress
@@ -98,7 +99,9 @@ end		--updateClock(e)
 	                    display.contentCenterX, display.contentCenterY*0.075 , native.newFont( "Helvetica-Bold" ,40 ))
 	sceneGroup:insert(metarTitle)
 
-
+	local displayMetar = display.newText( metarIs, display.contentCenterX, display.contentCenterY * 1.4, display.actualContentWidth*0.8,
+									display.actualContentHeight*0.4, native.systemFont,25)
+						sceneGroup:insert(displayMetar)
 --A button to download the latest metar
 local function onDownload ( event )
 	if (event.action == "clicked") then
@@ -191,7 +194,8 @@ timer.performWithDelay( 250, downloadPerc, 0 )
 	    elseif ( event.phase == "ended" or event.phase == "submitted" ) then    ---Enter (or what else) pressed
 	        -- event.target.text is the Output resulting text from "defaultField"
 	        print( event.target.text )
-
+					keyFocus = 1
+					print("focus is "..keyFocus)
 	        --metarText.text = metarIs	--event.target.text
 					local zuluTime = tonumber(os.date( "%H" )) - tonumber( os.date("%z")/100)  --Get ZULU TIME
 
@@ -215,10 +219,10 @@ timer.performWithDelay( 250, downloadPerc, 0 )
 					metarIs = string.sub(content_a, 1, -1)
 					print(metarIs)
 					file:close()
-
-					displayMetar = display.newText( metarIs, display.contentCenterX, display.contentCenterY * 1.4, display.actualContentWidth*0.8,
-													display.actualContentHeight*0.4, native.systemFont,25)
-				sceneGroup:insert(displayMetar)
+					displayMetar.text = metarIs
+					-- displayMetar = display.newText( metarIs, display.contentCenterX, display.contentCenterY * 1.4, display.actualContentWidth*0.8,
+					-- 								display.actualContentHeight*0.4, native.systemFont,25)
+				-- sceneGroup:insert(displayMetar)
 				end --if not file
 
 	    elseif ( event.phase == "editing" ) then
