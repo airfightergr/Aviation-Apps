@@ -53,7 +53,7 @@ function scene:create( event )
 	----------------------------------------------------------------------------------------------------------------------------
 	------Setction's title
 	local baroTitle = display.newText( "Barometric Pressure Conversion",
-	                    display.contentCenterX, display.contentCenterY * 0.30, native.newFont( "Helvetica-Bold" ,30 ))
+	                    display.contentCenterX, display.contentCenterY * 0.33, native.newFont( "Helvetica-Bold" ,30 ))
 	sceneGroup:insert(baroTitle)
 	----------------------------------------------------------------------------------------------------------------------------
 	--LEFT SIDE hPa to inHg
@@ -122,12 +122,156 @@ function scene:create( event )
 	inHg_tf:addEventListener( "userInput", inHg_tfListener )    --Register the listener
 sceneGroup:insert(inHg_tf)
 
--- 	local webView = native.newWebView( display.contentCenterX, display.contentCenterY*1.6, 500, 150 )
--- 	webView:request( urlMetar )
---
--- 	webView:addEventListener( "urlRequest", webListener )
--- sceneGroup:insert(webView)
+----------------------------------------------------------------------------------------------------------------------------
+--ALTITUDE CONVERSIONS
+----------------------------------------------------------------------------------------------------------------------------
+---Altitude title
+local altTitle = display.newText( "Altitude/Length Conversion",
+										display.contentCenterX, display.contentCenterY * 0.85, native.newFont( "Helvetica-Bold" ,30 ))
+sceneGroup:insert(altTitle)
+----------------------------------------------------------------------------------------------------------------------------
+--LEFT SIDE ft to meters
+----------------------------------------------------------------------------------------------------------------------------
+local ftTmt_tf --Textfiled to enter feet
 
+--Left Textfield title and output
+local ftTmt_label = display.newText( "Enter Feet",  display.contentCenterX * 0.5, display.contentCenterY * 0.95 ,
+										native.newFont( "Helvetica-Bold",25))
+sceneGroup:insert(ftTmt_label)
+local meterVal = display.newText( "meters",  display.contentCenterX * 0.5, display.contentCenterY * 1.15 ,
+										native.newFont( "Helvetica-Bold",25))
+sceneGroup:insert(meterVal)
+--Listener Function for the hpa->inhg Textfield
+local function ftTmt_Listener (event)
+	if ( event.phase == "began" ) then
+
+	elseif ( event.phase == "ended" or event.phase == "submitted" ) then
+		print(event.target.text)  --event.target.text is the Output resulting text from "defaultField"
+		--Let's change the output label with the new value
+		meterVal.text = string.format("%d meters", tonumber((event.target.text)) * 0.3048)
+	elseif ( event.phase == "editing" ) then
+			print( event.newCharacters )
+			print( event.oldText )
+			print( event.startPosition )
+			print( event.text )
+	end
+
+end
+--Create the Textfield itself
+ftTmt_tf = native.newTextField( display.contentCenterX * 0.5, display.contentCenterY * 1.05, 100, 40 )
+ftTmt_tf.inputType = "number"       --Set the type to only numbers. Should popup numaric keyboard
+ftTmt_tf:addEventListener( "userInput", ftTmt_Listener )    --Register the listener
+sceneGroup:insert(ftTmt_tf)
+----------------------------------------------------------------------------------------------------------------------------
+--RIGHT SIDE ft to meters
+----------------------------------------------------------------------------------------------------------------------------
+local mtTft_tf --Textfiled to enter feet
+
+--Left Textfield title and output
+local mtTft_label = display.newText( "Enter Meters",  display.contentCenterX * 1.5, display.contentCenterY * 0.95 ,
+										native.newFont( "Helvetica-Bold",25))
+sceneGroup:insert(mtTft_label)
+local feetVal = display.newText( "feet",  display.contentCenterX * 1.5, display.contentCenterY * 1.15 ,
+										native.newFont( "Helvetica-Bold",25))
+sceneGroup:insert(feetVal)
+--Listener Function for the hpa->inhg Textfield
+local function mtTft_Listener (event)
+	if ( event.phase == "began" ) then
+
+	elseif ( event.phase == "ended" or event.phase == "submitted" ) then
+		print(event.target.text)  --event.target.text is the Output resulting text from "defaultField"
+		--Let's change the output label with the new value
+		feetVal.text = string.format("%d feet", tonumber((event.target.text)) / 0.3048)
+	elseif ( event.phase == "editing" ) then
+			print( event.newCharacters )
+			print( event.oldText )
+			print( event.startPosition )
+			print( event.text )
+	end
+
+end
+--Create the Textfield itself
+mtTft_tf = native.newTextField( display.contentCenterX * 1.5, display.contentCenterY * 1.05, 100, 40 )
+mtTft_tf.inputType = "number"       --Set the type to only numbers. Should popup numaric keyboard
+mtTft_tf:addEventListener( "userInput", mtTft_Listener )    --Register the listener
+sceneGroup:insert(mtTft_tf)
+
+----------------------------------------------------------------------------------------------------------------------------
+--FUEL WEIGHT CONVERSIONS
+----------------------------------------------------------------------------------------------------------------------------
+---Altitude title
+local fuelTitle = display.newText( "Fuel Weight Conversion",
+										display.contentCenterX, display.contentCenterY * 1.35, native.newFont( "Helvetica-Bold" ,30 ))
+sceneGroup:insert(fuelTitle)
+----------------------------------------------------------------------------------------------------------------------------
+--LEFT SIDE kg to lbs
+----------------------------------------------------------------------------------------------------------------------------
+local kgTlbs_tf --Textfiled to enter feet
+
+--Left Textfield title and output
+local kgTlbs_label = display.newText( "Enter Kilograms",  display.contentCenterX * 0.5, display.contentCenterY * 1.45 ,
+										native.newFont( "Helvetica-Bold",25))
+sceneGroup:insert(kgTlbs_label)
+local lbsVal = display.newText( "lbs",  display.contentCenterX * 0.5, display.contentCenterY * 1.65 ,
+										native.newFont( "Helvetica-Bold",25))
+sceneGroup:insert(lbsVal)
+--Listener Function for the hpa->inhg Textfield
+local function kgTlbs_Listener (event)
+	if ( event.phase == "began" ) then
+
+	elseif ( event.phase == "ended" or event.phase == "submitted" ) then
+		print(event.target.text)  --event.target.text is the Output resulting text from "defaultField"
+		--Let's change the output label with the new value
+		lbsVal.text = string.format("%.1f lbs", tonumber((event.target.text)) * 2.2)
+	elseif ( event.phase == "editing" ) then
+			print( event.newCharacters )
+			print( event.oldText )
+			print( event.startPosition )
+			print( event.text )
+	end
+
+end
+--Create the Textfield itself
+kgTlbs_tf = native.newTextField( display.contentCenterX * 0.5, display.contentCenterY * 1.55, 120, 40 )
+kgTlbs_tf.inputType = "number"       --Set the type to only numbers. Should popup numaric keyboard
+kgTlbs_tf:addEventListener( "userInput", kgTlbs_Listener )    --Register the listener
+sceneGroup:insert(kgTlbs_tf)
+----------------------------------------------------------------------------------------------------------------------------
+--RIGHT SIDE lbs to kg
+----------------------------------------------------------------------------------------------------------------------------
+local lbsTkg_tf --Textfiled to enter feet
+
+--Left Textfield title and output
+local lbsTkg_label = display.newText( "Enter Pounds",  display.contentCenterX * 1.5, display.contentCenterY * 1.45 ,
+										native.newFont( "Helvetica-Bold",25))
+sceneGroup:insert(lbsTkg_label)
+local kgVal = display.newText( "kilograms",  display.contentCenterX * 1.5, display.contentCenterY * 1.65 ,
+										native.newFont( "Helvetica-Bold",25))
+sceneGroup:insert(kgVal)
+--Listener Function for the hpa->inhg Textfield
+local function lbsTkg_Listener (event)
+	if ( event.phase == "began" ) then
+
+	elseif ( event.phase == "ended" or event.phase == "submitted" ) then
+		print(event.target.text)  --event.target.text is the Output resulting text from "defaultField"
+		--Let's change the output label with the new value
+		kgVal.text = string.format("%.1f kg", tonumber((event.target.text)) / 2.2)
+	elseif ( event.phase == "editing" ) then
+			print( event.newCharacters )
+			print( event.oldText )
+			print( event.startPosition )
+			print( event.text )
+	end
+
+end
+--Create the Textfield itself
+lbsTkg_tf = native.newTextField( display.contentCenterX * 1.5, display.contentCenterY * 1.55, 120, 40 )
+lbsTkg_tf.inputType = "number"       --Set the type to only numbers. Should popup numaric keyboard
+lbsTkg_tf:addEventListener( "userInput", lbsTkg_Listener )    --Register the listener
+sceneGroup:insert(lbsTkg_tf)
+----------------------------------------------------------------------------------------------------------------------------
+--Bottom button to return to main menu.
+----------------------------------------------------------------------------------------------------------------------------
 buttonMenu = display.newRoundedRect(display.contentCenterX, display.contentCenterY*1.9,
 										display.contentWidth*0.5, display.contentHeight*0.075, 15 )
 buttonMenu:setFillColor(0,0,1)
@@ -136,15 +280,6 @@ buttonMenu:addEventListener("tap", changeScenes)
 
 buttonConversionsLabel = display.newText( "Return to Menu",  display.contentCenterX, display.contentCenterY*1.9, native.newFont( "Helvetica" ,30 ))
 sceneGroup:insert(buttonConversionsLabel)
-
-
-
-
-
-
-
-
-
 
 end	--scene:create
 
