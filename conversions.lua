@@ -130,6 +130,7 @@ sceneGroup:insert(inHg_tf)
 
 buttonMenu = display.newRoundedRect(display.contentCenterX, display.contentCenterY*1.9,
 										display.contentWidth*0.5, display.contentHeight*0.075, 15 )
+										
 buttonMenu:setFillColor(0,0,1)
 sceneGroup:insert(buttonMenu)
 buttonMenu:addEventListener("tap", changeScenes)
