@@ -18,6 +18,8 @@ local buttonConversions
 local buttonConversionsLabel
 local buttonWeather
 local buttonWeatherLabel
+local buttonXplane
+local buttonXplaneLabel
 local buttonMovingMap
 local buttonMovingMapLabel
 
@@ -39,6 +41,12 @@ local function gotoMovingMap()
 composer.gotoScene( "movingMap", {effect = "slideLeft", time = 500} )
 print("Scene --> movingMap")
 end
+
+local function gotoXplane()
+composer.gotoScene( "xplane", {effect = "slideLeft", time = 500} )
+print("Scene --> X-Plane")
+end
+
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
 -- -----------------------------------------------------------------------------------
@@ -57,6 +65,9 @@ function scene:create( event )
 	title:setFillColor(0,0,0)
 	sceneGroup:insert(title)
 
+	--------------------------------------------------------------------------------
+	--Button Conversions
+	--------------------------------------------------------------------------------
 	buttonConversions = display.newRoundedRect(display.contentCenterX, display.contentCenterY*0.6,
 											display.contentWidth*0.5, display.contentHeight*0.075, 15 )
 	buttonConversions:setFillColor(0.3,0.5,0.3)
@@ -67,6 +78,9 @@ function scene:create( event )
 	buttonConversionsLabel = display.newText( "Conversions",  display.contentCenterX, display.contentCenterY*0.6, native.newFont( "Helvetica" ,30 ))
 	sceneGroup:insert(buttonConversionsLabel)
 
+	--------------------------------------------------------------------------------
+	--Button Weather
+	--------------------------------------------------------------------------------
 	buttonWeather = display.newRoundedRect(display.contentCenterX, display.contentCenterY*0.8,
 											display.contentWidth*0.5, display.contentHeight*0.075, 15 )
 	buttonWeather:setFillColor(0.3,0.3,0.5)
@@ -76,7 +90,21 @@ function scene:create( event )
 	sceneGroup:insert(buttonWeatherLabel)
 	buttonWeather:addEventListener("tap", gotoWeather)
 
+	--------------------------------------------------------------------------------
+	--Button X-PLANE
+	--------------------------------------------------------------------------------
+	buttonXplane = display.newRoundedRect(display.contentCenterX, display.contentCenterY*1.2,
+											display.contentWidth*0.5, display.contentHeight*0.075, 15 )
+	buttonXplane:setFillColor(0.3,0.5,0.6)
+	sceneGroup:insert(buttonXplane)
 
+	buttonXplaneLabel = display.newText( "X-Plane",  display.contentCenterX, display.contentCenterY*1.2, native.newFont( "Helvetica" ,30 ))
+	sceneGroup:insert(buttonXplaneLabel)
+	buttonXplane:addEventListener("tap", gotoXplane)
+
+	--------------------------------------------------------------------------------
+	--Button MovingMap
+	--------------------------------------------------------------------------------
 	buttonMovingMap = display.newRoundedRect(display.contentCenterX, display.contentCenterY*1.5,
 											display.contentWidth*0.5, display.contentHeight*0.075, 15 )
 	buttonMovingMap:setFillColor(0.5,0.3,0.3)
@@ -90,6 +118,7 @@ function scene:create( event )
 --------------------------------------------------------------------------------
 
 end
+
 
 -- show()
 function scene:show( event )

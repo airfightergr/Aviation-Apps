@@ -46,20 +46,126 @@ function scene:create( event )
   ----------------------------------------------------------------------------------------------------------------------------
   --UDP test
   ----------------------------------------------------------------------------------------------------------------------------
-local function xplaneConnect()
-local		udp = socket.udp()
-		udp:setpeername("192.168.1.15", 49003)
-		udp:settimeout()
-
-		local toXPL = udp:send(string.byte("RPOS\010\0"))
-		 local data = udp:receive()
-		  if data then
-		    print("Received: ", data)
-			else print("No data ")
-				
-		  end
+local getIp = function()
+	local s = socket.udp()
+	s:setpeername("74.125.115.104", 80)
+	local ip, sock = s:getsockname()
+	print ("my IP: ", ip, sock)
+	return ip
 end
-timer.performWithDelay( 1000, xplaneConnect, 0)
+
+local function findServer( button )
+
+	local newServers = {}
+	local msg
+
+	local listen = socket.udp()
+	listen:setsockname("226.192.1.1", 11111)
+
+	local name = listen:getsockname()
+		if name then
+			listen:setoption( "ip-add-memebrship", { mutliaddr = "226.182.1.1", interface = getIP() } )
+		else
+			listen:close()
+			listen = socket.udp()
+			listen:setsockname( getIP(), 49001)
+		end
+
+		listen:settimeout(0)
+
+		local stop
+
+		local counter = 0
+
+		local function look()
+			repeat
+				local data, ip, port = listen:receivefrom()
+					print("data: ", data, "IP: ", ip, "port: ", port)
+				if data and data == msg then
+					if not newServers[ip] then
+						print("I hear a server: ", ip, port)
+						local params = { ["ip"] = ip, ["port"] = 49001}
+						newServers[ip] = params
+					end
+				end
+			until not data
+
+			counter = counter + 1
+			if counter == 20 then
+				stop()
+			end
+		end
+
+		local beginLooking = timer.performWithDelay( 100, look, 0 )
+
+		local function stop()
+			timer.cancel(beginLooking)
+			button.stopLooking = nil
+			evaluateServerList( newServers)
+			listen:close()
+		end
+		button.stopLooking = stopLooking
+end
+
+local function connectToServer(ip, port)
+	local sock, err = socket.connet(ip, port)
+	if sock == nil then
+		return false
+	end
+	sock:settimeout(0)
+	sock:setoption("tcp-nodelay", true)
+	sock:send("We are connented!\n")
+	return sock
+
+end
+
+local function xplaneConnect( sock, ip, port )
+	local buffer = {}
+	local clientPulse
+
+	local function cPulse()
+			local allData = {}
+			local data, err
+
+			repeat
+				data, err = socket:receive()
+					if data then
+						allData[#allData+1] = data
+					end
+					if err == "closed" and clientPulse then
+						data, err = socket:receive()
+						if data then
+							allData[#allData+1] = data
+						end
+					end
+			until not data
+
+			if #allData > 0 then
+				for i, thisData in ipairs( allData ) do
+					print("thisData: ", thisData)
+				end
+			end
+
+			for i, msg in pairs(buffer) do
+				local data, err = sock:send(msg)
+				if err == "closed" and clientPulse then
+					connectToServer(ip, port)
+					data, err = sock:send(msg)
+				end
+			end
+		end
+
+		local function stopClient()
+			timer.cancel(clientPulse)
+			clientPulse = nil
+			sock:close()
+		end
+
+		return stopClient
+
+
+end
+--timer.performWithDelay( 1000, xplaneConnect, 0)
   end	--scene:create
 
 
