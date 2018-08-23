@@ -1,6 +1,6 @@
 # Aviator's Companion
 
-A helper app for pilots, for iOS and Android. For more info, please check **wiki.
+A helper app for pilots, for iOS and Android. For more info, please check **wiki.**
 
 Build with Corona SDK (http://www.coronalabs.com)
 
