@@ -1,4 +1,12 @@
 local composer = require( "composer" )
+local socket = require( "socket" )
+local helpers = require( "helpers" )
+local udp = assert(socket.udp())
+
+local data
+local latX
+local lonX
+local byteOff = 0 --Byte offset. We start reading after that byte
 
 local scene = composer.newScene()
 
@@ -35,6 +43,24 @@ function scene:create( event )
   longitude = display.newText( "-", 350, 100	, native.systemFont, 25 )
 	sceneGroup:insert(longitude)
 
+	udp:settimeout(1)
+
+	assert(udp:setsockname("*", 49003))
+	assert(udp:setpeername("192.168.1.13", 49001))
+
+	local addr, portx = udp:getsockname()
+	print(addr, portx)
+
+	for i = 0, 2, 1 do
+		data = udp:receive()
+		if data then
+			break
+		end
+	end
+
+ 	latX = binary_to_float(data,10)
+	lonX = binary_to_float(data,14)
+
   local function mapLocationListener( event )
       print( "The tapped location is in: " .. event.latitude .. ", " .. event.longitude )
   end
@@ -45,10 +71,10 @@ local locationHandler = function( event )
          --native.showAlert( "GPS Location Error", event.errorMessage, {"OK"} )
          print( "Location error: " .. tostring( event.errorMessage ) )
      else
-         local latitudeText = string.format( '%.4f', event.latitude )
+         local latitudeText = string.format( '%.4f', latX )
          latitude.text = latitudeText
 
-         local longitudeText = string.format( '%.4f', event.longitude )
+         local longitudeText = string.format( '%.4f', lonX )
          longitude.text = longitudeText
 			 end
 
@@ -62,12 +88,12 @@ Runtime:addEventListener( "location", locationHandler )
 local function drawMap(e)			--draw the map
 	if  funcFlag == false then funcFlag = true	--check that the flag if it's false and set it true
 
-if latitude.text ~= nil and longitude.text ~= nil then	--we must get coordinates before start drawing the map.
+if latX ~= nil and lonX ~= nil then	--we must get coordinates before start drawing the map.
   -- Create a native map view
   local myMap = native.newMapView( display.contentCenterX, display.contentCenterY, display.contentWidth*0.9, display.contentHeight *0.7 )
 	sceneGroup:insert(myMap)
   -- Initialize map to a real location since default location (0,0) is not very interesting
-  myMap:setCenter( tonumber(latitude.text) , tonumber(longitude.text)) --set the center of the map to the coordinates.
+  myMap:setCenter( latX , lonX) --set the center of the map to the coordinates.
   myMap:addEventListener( "mapLocation", mapLocationListener )
 
 
