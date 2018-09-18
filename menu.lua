@@ -1,10 +1,10 @@
 -- Load the relevant LuaSocket modules
-local http = require( "socket.http" )
+local socket = require( "socket" )
 local ltn12 = require( "ltn12" )
-
-
-
+local helpers = require( "helpers" )
 local composer = require( "composer" )
+--local udp = assert(socket.udp())
+
 
 local scene = composer.newScene()
 
@@ -47,6 +47,9 @@ composer.gotoScene( "xplane", {effect = "slideLeft", time = 500} )
 print("Scene --> X-Plane")
 end
 
+local function openWiki()
+	system.openURL( "https://github.com/airfightergr/Aviation-Apps/wiki" )
+end
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
 -- -----------------------------------------------------------------------------------
@@ -61,63 +64,102 @@ function scene:create( event )
 	sceneGroup:insert(bg)
 	local image = display.newImage( "assets/logo.png" , display.contentCenterX, display.contentCenterY*1.8)
 	sceneGroup:insert(image)
-	title = display.newText("Aviator's Companion", display.contentCenterX, display.contentCenterY*0.2,native.newFont( "Helvetica-Bold" ,40 ))
+	title = display.newText("Aviator's Companion", display.contentCenterX, display.contentHeight*0.075,native.newFont( "Helvetica-Bold" ,40 ))
 	title:setFillColor(0,0,0)
 	sceneGroup:insert(title)
 
 	--------------------------------------------------------------------------------
 	--Button Conversions
 	--------------------------------------------------------------------------------
-	buttonConversions = display.newRoundedRect(display.contentCenterX, display.contentCenterY*0.6,
+	buttonConversions = display.newRoundedRect(display.contentCenterX, display.contentHeight*0.2,
 											display.contentWidth*0.5, display.contentHeight*0.075, 15 )
 	buttonConversions:setFillColor(0.3,0.5,0.3)
 	sceneGroup:insert(buttonConversions)
 
 	buttonConversions:addEventListener("tap", gotoConversions)
 
-	buttonConversionsLabel = display.newText( "Conversions",  display.contentCenterX, display.contentCenterY*0.6, native.newFont( "Helvetica" ,30 ))
+	buttonConversionsLabel = display.newText( "Conversions",  display.contentCenterX, display.contentHeight*0.2, native.newFont( "Helvetica" ,30 ))
 	sceneGroup:insert(buttonConversionsLabel)
 
 	--------------------------------------------------------------------------------
 	--Button Weather
 	--------------------------------------------------------------------------------
-	buttonWeather = display.newRoundedRect(display.contentCenterX, display.contentCenterY*0.8,
+	buttonWeather = display.newRoundedRect(display.contentCenterX, display.contentHeight*0.3,
 											display.contentWidth*0.5, display.contentHeight*0.075, 15 )
 	buttonWeather:setFillColor(0.3,0.3,0.5)
 	sceneGroup:insert(buttonWeather)
 
-	buttonWeatherLabel = display.newText( "Weather",  display.contentCenterX, display.contentCenterY*0.8, native.newFont( "Helvetica" ,30 ))
+	buttonWeatherLabel = display.newText( "Weather",  display.contentCenterX, display.contentHeight*0.3, native.newFont( "Helvetica" ,30 ))
 	sceneGroup:insert(buttonWeatherLabel)
 	buttonWeather:addEventListener("tap", gotoWeather)
 
 	--------------------------------------------------------------------------------
 	--Button X-PLANE
 	--------------------------------------------------------------------------------
-	buttonXplane = display.newRoundedRect(display.contentCenterX, display.contentCenterY*1.2,
+	buttonXplane = display.newRoundedRect(display.contentCenterX, display.contentHeight*0.4,
 											display.contentWidth*0.5, display.contentHeight*0.075, 15 )
 	buttonXplane:setFillColor(0.3,0.5,0.6)
 	sceneGroup:insert(buttonXplane)
 
-	buttonXplaneLabel = display.newText( "X-Plane",  display.contentCenterX, display.contentCenterY*1.2, native.newFont( "Helvetica" ,30 ))
+	buttonXplaneLabel = display.newText( "X-Plane",  display.contentCenterX, display.contentHeight*0.4, native.newFont( "Helvetica" ,30 ))
 	sceneGroup:insert(buttonXplaneLabel)
 	buttonXplane:addEventListener("tap", gotoXplane)
 
 	--------------------------------------------------------------------------------
 	--Button MovingMap
 	--------------------------------------------------------------------------------
-	buttonMovingMap = display.newRoundedRect(display.contentCenterX, display.contentCenterY*1.5,
+	buttonMovingMap = display.newRoundedRect(display.contentCenterX, display.contentHeight*0.5,
 											display.contentWidth*0.5, display.contentHeight*0.075, 15 )
 	buttonMovingMap:setFillColor(0.5,0.3,0.3)
 	sceneGroup:insert(buttonMovingMap)
 
-	buttonMovingMapLabel = display.newText( "Moving Map",  display.contentCenterX, display.contentCenterY*1.5, native.newFont( "Helvetica" ,30 ))
+	buttonMovingMapLabel = display.newText( "Moving Map",  display.contentCenterX, display.contentHeight*0.5, native.newFont( "Helvetica" ,30 ))
 	sceneGroup:insert(buttonMovingMapLabel)
 	buttonMovingMap:addEventListener("tap", gotoMovingMap)
+
+	--------------------------------------------------------------------------------
+	--Button Manual
+	--------------------------------------------------------------------------------
+	buttonManual = display.newRoundedRect(display.contentCenterX, display.contentHeight*0.7,
+											display.contentWidth*0.5, display.contentHeight*0.075, 15 )
+	buttonManual:setFillColor(0.9,0.9,0.0)
+	sceneGroup:insert(buttonManual)
+
+	buttonManualLabel = display.newText( "Open Manual",  display.contentCenterX, display.contentHeight*0.7, native.newFont( "Helvetica" ,30 ))
+	buttonManualLabel:setFillColor(0,0,0)
+	sceneGroup:insert(buttonManualLabel)
+	buttonManualLabel:addEventListener("tap", openWiki)
 --------------------------------------------------------------------------------
 --TESTS
 --------------------------------------------------------------------------------
+local function findDeviceIP()
+
+	local client = socket.connect( "www.google.com", 80 )
+
+	local ip, port = client:getsockname()
+
+	print(ip)
+
+	client:close()
+
+	return ip
 
 end
+
+local IPDisplay_title = display.newText( "X-Plane Network Settings", display.contentCenterX, display.contentHeight*0.77,
+												native.newFont( "Helvetica" , 20 ))
+			IPDisplay_title:setFillColor(0,0,0)
+sceneGroup:insert(IPDisplay_title)
+
+local IPDisplay_add = display.newText( string.format("IP address: %s - Port: 49003", findDeviceIP() ), display.contentCenterX, display.contentHeight*0.8,
+												native.newFont( "Helvetica" , 20 ))
+			IPDisplay_add:setFillColor(0,0,0)
+sceneGroup:insert(IPDisplay_add)
+
+
+
+
+end --scene:create( event )
 
 
 -- show()

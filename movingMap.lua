@@ -43,10 +43,30 @@ function scene:create( event )
   longitude = display.newText( "-", 350, 100	, native.systemFont, 25 )
 	sceneGroup:insert(longitude)
 
+	----------------------------------------------------------------------------------------------------------------------------
+  --UDP test
+  ----------------------------------------------------------------------------------------------------------------------------
+	function findDeviceIP()
+
+	local client = socket.connect( "www.google.com", 80 )
+
+	local ip, port = client:getsockname()
+
+		print(ip)
+
+		client:close()
+
+		return ip
+
+	end
+
+	local myIP = display.newText( findDeviceIP(), display.contentCenterX, display.contentCenterY * 1.75, native.newFont( "Helvetica-Bold", 30 ))
+	sceneGroup:insert(myIP)
+
 	udp:settimeout(1)
 
 	assert(udp:setsockname("*", 49003))
-	assert(udp:setpeername("192.168.1.13", 49001))
+	assert(udp:setpeername(findDeviceIP(), 49001))
 
 	local addr, portx = udp:getsockname()
 	print(addr, portx)
@@ -58,9 +78,12 @@ function scene:create( event )
 		end
 	end
 
- 	latX = binary_to_float(data,10)
-	lonX = binary_to_float(data,14)
+ 	latX = binary_to_float(data,10+31)
+	lonX = binary_to_float(data,14+31)
 
+	----------------------------------------------------------------------------------------------------------------------------
+  --UDP test
+  ----------------------------------------------------------------------------------------------------------------------------
   local function mapLocationListener( event )
       print( "The tapped location is in: " .. event.latitude .. ", " .. event.longitude )
   end

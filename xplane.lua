@@ -6,6 +6,7 @@ local udp = assert(socket.udp())
 local data
 local byteOff = 0 --Byte offset. We start reading after that byte
 
+local posXP = {}
 
 local scene = composer.newScene()
 
@@ -46,22 +47,69 @@ function scene:create( event )
   buttonConversionsLabel = display.newText( "Return to Menu",  display.contentCenterX, display.contentCenterY*1.9, native.newFont( "Helvetica" ,30 ))
   sceneGroup:insert(buttonConversionsLabel)
 
+
+	-----------------
+	--PRINT X-Plane data on screen
+	------------------
+	local xplaneLat = display.newText( "", display.contentCenterX, display.contentCenterY * 0.30,
+								native.newFont( "Helvetica-Bold", 30 ))
+	sceneGroup:insert(xplaneLat)
+
+	local xplaneLon = display.newText( "", display.contentCenterX, display.contentCenterY * 0.50,
+								native.newFont( "Helvetica-Bold", 30 ))
+	sceneGroup:insert(xplaneLon)
+
+	local xplaneAlt= display.newText( "", display.contentCenterX, display.contentCenterY * 0.70,
+								native.newFont( "Helvetica-Bold", 30 ))
+	sceneGroup:insert(xplaneAlt)
   ----------------------------------------------------------------------------------------------------------------------------
   --UDP test
   ----------------------------------------------------------------------------------------------------------------------------
-	udp:settimeout(1)
+	function findDeviceIP()
+
+		local client = socket.connect( "www.google.com", 80 )
+
+		local ip, port = client:getsockname()
+
+		print(ip)
+
+		client:close()
+
+		return ip
+
+	end
+
+local myIP = display.newText( findDeviceIP(), display.contentCenterX, display.contentCenterY * 1.7, native.newFont( "Helvetica-Bold", 30 ))
+sceneGroup:insert(myIP)
+
 
 	assert(udp:setsockname("*", 49003))
-	assert(udp:setpeername("127.0.0.1", 49001))
+	assert(udp:setpeername(findDeviceIP(), 49001))
 
-	for i = 0, 2, 1 do
+local function readUDP()
+	for i = 0, 100, 1 do
 		data = udp:receive()
 		if data then
 			break
 		end
 	end
-print("X-Plane raw data: ", data)
-print ("test function: ", binary_to_float(data,10))
+--print("Group: ", string.byte(data,6))
+-- print("Group: ", string.byte(data,42))
+if data then
+ posXP = {binary_to_float(data, 10), binary_to_float(data,14), binary_to_float(data,18)}
+
+ xplaneLat.text = string.format("Indicated Airspeed: %4.1f", posXP[1])
+ xplaneLon.text = string.format("%6.4f", posXP[2])
+ xplaneAlt.text = string.format("%6.4f", posXP[3])
+else
+	xplaneLat.text = "No data available"
+	xplaneLon.text = "Please check your settings"
+	xplaneAlt.text = "Start the X-Plane first!"
+end --if
+end --readUDP
+
+timer.performWithDelay( 100, readUDP, 0)
+
 
 
 	end	--scene:create
