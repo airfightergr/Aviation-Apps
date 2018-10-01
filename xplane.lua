@@ -1,3 +1,4 @@
+local globals = require( "globals" )
 local socket = require( "socket" )
 local helpers = require( "helpers" )
 local composer = require( "composer" )
@@ -65,26 +66,29 @@ function scene:create( event )
   ----------------------------------------------------------------------------------------------------------------------------
   --UDP test
   ----------------------------------------------------------------------------------------------------------------------------
-	function findDeviceIP()
+		-- local function findDeviceIP()
+		--
+		-- 	local client = socket.connect( "www.google.com", 80 )
+		--
+		-- 	local ip, port = client:getsockname()
+		--
+		-- 	print(ip)
+		--
+		-- 	client:close()
+		--
+		-- 	return ip
+		--
+		-- end
 
-		local client = socket.connect( "www.google.com", 80 )
-
-		local ip, port = client:getsockname()
-
-		print(ip)
-
-		client:close()
-
-		return ip
-
-	end
-
-local myIP = display.newText( findDeviceIP(), display.contentCenterX, display.contentCenterY * 1.7, native.newFont( "Helvetica-Bold", 30 ))
+local myIP = display.newText( globals.deviceIP, display.contentCenterX, display.contentHeight * 0.85,
+														native.newFont( "Helvetica-Bold", 30 ))
 sceneGroup:insert(myIP)
 
-
 	assert(udp:setsockname("*", 49003))
-	assert(udp:setpeername(findDeviceIP(), 49001))
+	assert(udp:setpeername(globals.deviceIP, 49001))
+	--
+	-- assert(udp:setsockname("*", 49003))
+	-- assert(udp:setpeername(findDeviceIP(), 49001))
 
 local function readUDP()
 	for i = 0, 100, 1 do
@@ -92,7 +96,7 @@ local function readUDP()
 		if data then
 			break
 		end
-	end
+end
 --print("Group: ", string.byte(data,6))
 -- print("Group: ", string.byte(data,42))
 if data then

@@ -1,10 +1,9 @@
 -- Load the relevant LuaSocket modules
-local socket = require( "socket" )
+local globals = require( "globals" )
 local ltn12 = require( "ltn12" )
 local helpers = require( "helpers" )
 local composer = require( "composer" )
 --local udp = assert(socket.udp())
-
 
 local scene = composer.newScene()
 
@@ -43,7 +42,7 @@ print("Scene --> movingMap")
 end
 
 local function gotoXplane()
-composer.gotoScene( "xplane", {effect = "slideLeft", time = 500} )
+composer.gotoScene( "xplane", {effect = "crossFade", time = 50} )
 print("Scene --> X-Plane")
 end
 
@@ -132,26 +131,14 @@ function scene:create( event )
 --------------------------------------------------------------------------------
 --TESTS
 --------------------------------------------------------------------------------
-local function findDeviceIP()
 
-	local client = socket.connect( "www.google.com", 80 )
-
-	local ip, port = client:getsockname()
-
-	print(ip)
-
-	client:close()
-
-	return ip
-
-end
 
 local IPDisplay_title = display.newText( "X-Plane Network Settings", display.contentCenterX, display.contentHeight*0.77,
 												native.newFont( "Helvetica" , 20 ))
 			IPDisplay_title:setFillColor(0,0,0)
 sceneGroup:insert(IPDisplay_title)
 
-local IPDisplay_add = display.newText( string.format("IP address: %s - Port: 49003", findDeviceIP() ), display.contentCenterX, display.contentHeight*0.8,
+local IPDisplay_add = display.newText( string.format("IP address: %s - Port: 49003", globals.deviceIP ), display.contentCenterX, display.contentHeight*0.8,
 												native.newFont( "Helvetica" , 20 ))
 			IPDisplay_add:setFillColor(0,0,0)
 sceneGroup:insert(IPDisplay_add)

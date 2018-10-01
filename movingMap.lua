@@ -46,7 +46,7 @@ function scene:create( event )
 	----------------------------------------------------------------------------------------------------------------------------
   --UDP test
   ----------------------------------------------------------------------------------------------------------------------------
-	function findDeviceIP()
+	local function findDeviceIP()
 
 	local client = socket.connect( "www.google.com", 80 )
 
@@ -60,7 +60,8 @@ function scene:create( event )
 
 	end
 
-	local myIP = display.newText( findDeviceIP(), display.contentCenterX, display.contentCenterY * 1.75, native.newFont( "Helvetica-Bold", 30 ))
+	local myIP = display.newText( findDeviceIP(), display.contentCenterX, display.contentHeight * 0.9,
+																native.newFont( "Helvetica-Bold", 30 ))
 	sceneGroup:insert(myIP)
 
 	udp:settimeout(1)
@@ -71,7 +72,7 @@ function scene:create( event )
 	local addr, portx = udp:getsockname()
 	print(addr, portx)
 
-	for i = 0, 2, 1 do
+	for i = 0, 100, 1 do
 		data = udp:receive()
 		if data then
 			break
