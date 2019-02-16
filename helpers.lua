@@ -18,3 +18,23 @@ end
 --local str = "DATA*\20\0\0\0\237\222\28\66\189\59\182\65..."
 --print(binary_to_float(str, 10))  --> 39.217700958252
 --print(binary_to_float(str, 14))  --> 22.779169082642
+
+
+
+function CoordsDeciToMinutes( )
+
+   ---Takes coordinates in decimal format and outputs in HH MM.s in a table
+
+
+
+
+end
+
+
+function CoordsMinutesToDeci( )
+
+
+
+
+
+end
