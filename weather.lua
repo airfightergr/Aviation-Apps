@@ -11,6 +11,8 @@ local arptID --Init newTextField for entering the airport's ICAO code to search 
 local displayMetar
 local percText = ""
 
+local hourUTC
+
 local weatherAlertText = ""
 local weatherAlert
 
@@ -19,12 +21,12 @@ local keyFocus = 0
 
 local function networkListener( event )   ---Now we need this to display the download progress
 
-	local zuluTime = tonumber(os.date( "%H" )) - tonumber( os.date("%z")/100)  --Get ZULU TIME
+	local zuluTime = tonumber(os.date( "%H" )) - tonumber( os.date("!%H")/100)  --Get ZULU TIME
 
 	  	if zuluTime < 0 then zuluTime = zuluTime + 24 end           --if ZULU TIME is negative, add 24 to fix it.
 
 	local timeMetar = string.format("%02s" .. "Z.TXT", zuluTime)
-	local urlMetar = 'http://tgftp.nws.noaa.gov/data/observations/metar/cycles/'..timeMetar
+	local urlMetar = 'https://tgftp.nws.noaa.gov/data/observations/metar/cycles/'..timeMetar
 	print(urlMetar)
 
 
@@ -82,8 +84,8 @@ function scene:create( event )
 
 local function updateClock(e)       --Use this function to update the clock
 
-	local hourUTC = tonumber(os.date( "%H" )) - tonumber( os.date("%z")/100)
-	if hourUTC < 0 then hourUTC = hourUTC + 24 end
+	hourUTC = tonumber(os.date( "%H" )) - tonumber( os.date("!%H")/100)
+		if hourUTC < 0 then hourUTC = hourUTC + 24 end
 	--Put the values to the UTC_time text
 	UTC_time.text = string.format( "TIME NOW: %02d:%sZ / %s:%s Local", hourUTC, os.date("%M"),os.date("%H"),os.date("%M"))
 
@@ -96,7 +98,7 @@ end		--updateClock(e)
 	----------------------------------------------------------------------------------------------------------------------------
 	--METAR section title
 	local metarTitle = display.newText( "WEATHER",
-	                    display.contentCenterX, display.contentCenterY*0.075 , native.newFont( "Helvetica-Bold" ,40 ))
+	                    display.contentCenterX, display.contentCenterY*0.075 , native.newFont( "Helvetica" ,40 ))
 	sceneGroup:insert(metarTitle)
 
 	local displayMetar = display.newText( metarIs, display.contentCenterX, display.contentCenterY * 1.4, display.actualContentWidth*0.8,
@@ -109,12 +111,12 @@ local function onDownload ( event )
 			if (i == 2) then
 
 			elseif ( i == 1 ) then
-				local zuluTime = tonumber(os.date( "%H" )) - tonumber( os.date("%z")/100)  --Get ZULU TIME
+				local zuluTime = tonumber(os.date( "%H" )) - tonumber( os.date("!%H")/100)  --Get ZULU TIME
 
 				  	if zuluTime < 0 then zuluTime = zuluTime + 24 end           --if ZULU TIME is negative, add 24 to fix it.
 
 				local timeMetar = string.format("%02s" .. "Z.TXT", zuluTime)
-				local urlMetar = 'http://tgftp.nws.noaa.gov/data/observations/metar/cycles/'..timeMetar
+				local urlMetar = 'https://tgftp.nws.noaa.gov/data/observations/metar/cycles/'..timeMetar
 
 			--if not timeMetar then
 				local params = {}
@@ -158,7 +160,7 @@ end
 	----------------------------------------------------------------------------------------------------------------------------
 
 	local metarDownLabel = display.newText( "GET METARs", display.contentCenterX, display.contentCenterY * 0.5,
- 												native.newFont( "Helvetica-Bold" ,25 ))
+ 												native.newFont( "Helvetica" ,25 ))
 	sceneGroup:insert(metarDownLabel)
 
 local downPerc = display.newText( "", display.contentCenterX, display.contentCenterY * 0.6, native.newFont( "Helvetica" ,25 ) )
@@ -170,13 +172,13 @@ end
 timer.performWithDelay( 250, downloadPerc, 0 )
 	--Input label title
 	local pageTitle = display.newText( "METAR", display.contentCenterX, display.contentCenterY * 0.3,
-	                    native.newFont( "Helvetica-Bold" ,30 ))
+	                    native.newFont( "Helvetica" ,30 ))
 											sceneGroup:insert(pageTitle)
 	local downloadMetarText = display.newText( "Press the button to download METARs (size:~3MB)", display.contentCenterX, display.contentCenterY * 0.4,
 	                    native.newFont( "Helvetica" ,20 ))
 											sceneGroup:insert(downloadMetarText)
 	local arptID_label2 = display.newText( "Enter Airport's ICAO code", display.contentCenterX, display.contentCenterY * 0.7,
-	                    native.newFont( "Helvetica-Bold" ,25 ))
+	                    native.newFont( "Helvetica" ,25 ))
 											sceneGroup:insert(arptID_label2)
 --The text that will display the METAR
 	--local metarText = display.newText( metarIs, display.contentCenterX, display.contentCenterY * 1.4, display.actualContentWidth*0.8,
@@ -197,12 +199,12 @@ timer.performWithDelay( 250, downloadPerc, 0 )
 					keyFocus = 1
 					print("focus is "..keyFocus)
 	        --metarText.text = metarIs	--event.target.text
-					local zuluTime = tonumber(os.date( "%H" )) - tonumber( os.date("%z")/100)  --Get ZULU TIME
+					local zuluTime = tonumber(os.date( "%H" )) - tonumber( os.date("!%H")/100)  --Get ZULU TIME
 
 							if zuluTime < 0 then zuluTime = zuluTime + 24 end           --if ZULU TIME is negative, add 24 to fix it.
 
 					local timeMetar = string.format("%02s" .. "Z.TXT", zuluTime)
-					local urlMetar = 'http://tgftp.nws.noaa.gov/data/observations/metar/cycles/'..timeMetar
+					local urlMetar = 'https://tgftp.nws.noaa.gov/data/observations/metar/cycles/'..timeMetar
 				--	metarParsing()
 					local arptMetar = {}
 

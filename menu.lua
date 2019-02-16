@@ -17,8 +17,8 @@ local buttonConversions
 local buttonConversionsLabel
 local buttonWeather
 local buttonWeatherLabel
-local buttonXplane
-local buttonXplaneLabel
+local buttonComputations
+local buttonComputationsLabel
 local buttonMovingMap
 local buttonMovingMapLabel
 
@@ -41,9 +41,9 @@ composer.gotoScene( "movingMap", {effect = "slideLeft", time = 500} )
 print("Scene --> movingMap")
 end
 
-local function gotoXplane()
-composer.gotoScene( "xplane", {effect = "crossFade", time = 50} )
-print("Scene --> X-Plane")
+local function gotoComputations()
+composer.gotoScene( "computations", {effect = "crossFade", time = 50} )
+print("Scene --> Computations")
 end
 
 local function openWiki()
@@ -63,7 +63,7 @@ function scene:create( event )
 	sceneGroup:insert(bg)
 	local image = display.newImage( "assets/logo.png" , display.contentCenterX, display.contentCenterY*1.8)
 	sceneGroup:insert(image)
-	title = display.newText("Aviator's Companion", display.contentCenterX, display.contentHeight*0.075,native.newFont( "Helvetica-Bold" ,40 ))
+	title = display.newText("Aviator's Companion", display.contentCenterX, display.contentHeight*0.075,native.newFont( "Helvetica" , 40 ))
 	title:setFillColor(0,0,0)
 	sceneGroup:insert(title)
 
@@ -93,16 +93,16 @@ function scene:create( event )
 	buttonWeather:addEventListener("tap", gotoWeather)
 
 	--------------------------------------------------------------------------------
-	--Button X-PLANE
+	--Button Computations
 	--------------------------------------------------------------------------------
-	buttonXplane = display.newRoundedRect(display.contentCenterX, display.contentHeight*0.4,
+	buttonComputations = display.newRoundedRect(display.contentCenterX, display.contentHeight*0.4,
 											display.contentWidth*0.5, display.contentHeight*0.075, 15 )
-	buttonXplane:setFillColor(0.3,0.5,0.6)
-	sceneGroup:insert(buttonXplane)
+	buttonComputations:setFillColor(0.3,0.5,0.6)
+	sceneGroup:insert(buttonComputations)
 
-	buttonXplaneLabel = display.newText( "X-Plane",  display.contentCenterX, display.contentHeight*0.4, native.newFont( "Helvetica" ,30 ))
-	sceneGroup:insert(buttonXplaneLabel)
-	buttonXplane:addEventListener("tap", gotoXplane)
+	buttonComputationsLabel = display.newText( "Computations",  display.contentCenterX, display.contentHeight*0.4, native.newFont( "Helvetica" ,30 ))
+	sceneGroup:insert(buttonComputationsLabel)
+	buttonComputations:addEventListener("tap", gotoComputations)
 
 	--------------------------------------------------------------------------------
 	--Button MovingMap
