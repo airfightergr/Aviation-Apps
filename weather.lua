@@ -27,11 +27,6 @@ local keyFocus = 0
 local function networkListener( event )   ---Now we need this to display the download progress
 
 
-
---	local urlMetar = 'https://www.aviationweather.gov/adds/dataserver_current/current/metars.cache.csv'
---	print(urlMetar)
-
-
 		if ( event.isError ) then
 				print( "Network error: ", event.response )
 
