@@ -36,8 +36,13 @@ print("Scene --> movingMap")
 end
 
 local function gotoComputations()
-composer.gotoScene( "computations", {effect = "crossFade", time = 50} )
+composer.gotoScene( "computations", {effect = "slideLeft", time = 500} )
 print("Scene --> Computations")
+end
+
+local function gotoAirportData()
+composer.gotoScene( "airportData", {effect = "slideLeft", time = 500} )
+print("Scene --> gotoAirportData")
 end
 
 local function openWiki()
@@ -89,13 +94,13 @@ function scene:create( event )
 	sceneGroup:insert(buttCompute)
 	buttCompute:addEventListener("tap", gotoComputations)
 	--------------------------------------------------------------------------------
-	--Button Nothing!
+	--Button Airport Data
 	--------------------------------------------------------------------------------
-	local buttLast = display.newImageRect( buttImageSheet, 4 , display.contentWidth*0.35, display.contentWidth*0.35)
-	buttLast.x = display.contentWidth * 0.75
-	buttLast.y = display.contentHeight * 0.50
-	sceneGroup:insert(buttLast)
-	--buttLast:addEventListener("tap", gotoComputations)
+	local buttairData = display.newImageRect( buttImageSheet, 4 , display.contentWidth*0.35, display.contentWidth*0.35)
+	buttairData.x = display.contentWidth * 0.75
+	buttairData.y = display.contentHeight * 0.50
+	sceneGroup:insert(buttairData)
+	buttairData:addEventListener("tap", gotoAirportData)
 
 	--------------------------------------------------------------------------------
 	--Button Manual

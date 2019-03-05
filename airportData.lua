@@ -1,10 +1,11 @@
 --
 -- Created by IntelliJ IDEA.
 -- User: airfi
--- Date: 16/2/2019
--- Time: 17:52
+-- Date: 5/3/2019
+-- Time: 06:59
 -- To change this template use File | Settings | File Templates.
 --
+
 
 local composer = require( "composer" )
 
@@ -18,9 +19,11 @@ local bg
 local title
 local buttonMenu
 
+local arptID
+
 local function changeScenes()
     composer.gotoScene( "menu", {effect = "slideRight", time = 500} )
-    print("Scene --> Computations")
+    print("Scene --> Airport Data")
 end
 
 
@@ -34,16 +37,16 @@ function scene:create( event )
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
     bg = display.newRect( display.contentCenterX, display.contentCenterY, display.contentWidth, display.contentHeight )
-    bg:setFillColor(0.3,0.5,0.6)
+    bg:setFillColor(0.7,0.6,0.5)
     sceneGroup:insert(bg)
     --App title
-    title = display.newText( "COMPUTATIONS", display.contentCenterX, display.contentCenterY * 0.075, native.newFont( "Helvetica" ,40 ))
+    title = display.newText( "AIRPORT DATA", display.contentCenterX, display.contentCenterY * 0.075, native.newFont( "Helvetica" ,40 ))
     sceneGroup:insert(title)
     ----------------------------------------------------------------------------------------------------------------------------
     -- Bottom time display
     ----------------------------------------------------------------------------------------------------------------------------
     --Create a new text to display the time
-    local UTC_time = display.newText( "", display.contentCenterX, display.contentCenterY * 0.20)
+    local UTC_time = display.newText( "", display.contentCenterX, display.contentCenterY * 0.15)
     sceneGroup:insert(UTC_time)
     local function updateClock(e)       --Use this function to update the clock
 
@@ -63,8 +66,15 @@ function scene:create( event )
 
 
 
-
-
+    ----------------------------------------------------------------------------------------------------------------------------
+    --Get airport ID
+    ----------------------------------------------------------------------------------------------------------------------------
+    local icaoID = display.newText("Enter Airport's ICAO code", display.contentCenterX, display.contentCenterY * 0.27,
+                    native.newFont( "Helvetica" ,25 ))
+    sceneGroup:insert(icaoID)
+    arptID = native.newTextField( display.contentCenterX, display.contentCenterY*0.35, 100, 40 )
+    --arptID:addEventListener( "userInput", arptIDListener )
+    sceneGroup:insert(arptID)
 
 
 
@@ -78,25 +88,25 @@ function scene:create( event )
     --Bottom button to return to main menu.
     ----------------------------------------------------------------------------------------------------------------------------
     buttonMenu = display.newRoundedRect(display.contentCenterX, display.contentCenterY*1.9,
-        display.contentWidth*0.4, display.contentHeight*0.05, 15 )
+        display.contentWidth*0.4, display.contentHeight*0.05, 15)
     buttonMenu:setFillColor(0,0,1)
     sceneGroup:insert(buttonMenu)
     buttonMenu:addEventListener("tap", changeScenes)
 
-    buttonConversionsLabel = display.newText( "Return to Menu",  display.contentCenterX, display.contentCenterY*1.9,
+    local buttonMenuLabel = display.newText( "Return to Menu",  display.contentCenterX, display.contentCenterY*1.9,
             native.newFont( "Helvetica" ,25 ))
-    sceneGroup:insert(buttonConversionsLabel)
+    sceneGroup:insert(buttonMenuLabel)
 
 
 
 
 
 
-    end	--scene:create
+end	--scene:create
 
 
-    -- show()
-    function scene:show( event )
+-- show()
+function scene:show( event )
 
     local sceneGroup = self.view
     local phase = event.phase

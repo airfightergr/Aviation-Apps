@@ -27,7 +27,7 @@ function scene:create( event )
 	bg:setFillColor(0.3,0.5,0.3)
 	sceneGroup:insert(bg)
 	--App title
-	title = display.newText( "CONVERTIONS", display.contentCenterX, display.contentCenterY * 0.075, native.newFont( "Helvetica-Bold" ,40 ))
+	title = display.newText( "CONVERTIONS", display.contentCenterX, display.contentCenterY * 0.075, native.newFont( "Helvetica" ,40 ))
 	sceneGroup:insert(title)
 	----------------------------------------------------------------------------------------------------------------------------
 	-- Bottom time display
@@ -37,8 +37,8 @@ function scene:create( event )
 	sceneGroup:insert(UTC_time)
 	local function updateClock(e)       --Use this function to update the clock
 
-	local hourUTC = tonumber(os.date( "%H" )) - tonumber( os.date("%z")/100)
-	if hourUTC < 0 then hourUTC = hourUTC + 24 end
+	local hourUTC =  tonumber( os.date("!%H"))
+	--if hourUTC < 0 then hourUTC = hourUTC + 24 end
 	--Put the values to the UTC_time text
 	UTC_time.text = string.format( "TIME NOW: %02d:%sZ / %s:%s Local", hourUTC, os.date("%M"),os.date("%H"),os.date("%M"))
 
@@ -52,7 +52,7 @@ function scene:create( event )
 	----------------------------------------------------------------------------------------------------------------------------
 	------Setction's title
 	local baroTitle = display.newText( "Barometric Pressure Conversion",
-	                    display.contentCenterX, display.contentCenterY * 0.33, native.newFont( "Helvetica-Bold" ,30 ))
+	                    display.contentCenterX, display.contentCenterY * 0.33, native.newFont( "Helvetica" ,30 ))
 	sceneGroup:insert(baroTitle)
 	----------------------------------------------------------------------------------------------------------------------------
 	--LEFT SIDE hPa to inHg
@@ -61,10 +61,10 @@ function scene:create( event )
 
 	--Left Textfield title and output
 	local hPa_tf_label = display.newText( "Enter hPa",  display.contentCenterX * 0.5, display.contentCenterY * 0.45 ,
-	                    native.newFont( "Helvetica-Bold",25))
+	                    native.newFont( "Helvetica",25))
 	sceneGroup:insert(hPa_tf_label)
 	local inHgVal = display.newText( "inHg",  display.contentCenterX * 0.5, display.contentCenterY * 0.65 ,
-	                    native.newFont( "Helvetica-Bold",25))
+	                    native.newFont( "Helvetica",25))
   sceneGroup:insert(inHgVal)
 	--Listener Function for the hpa->inhg Textfield
 	local function hPa_tfListener (event)
@@ -94,10 +94,10 @@ function scene:create( event )
 
 	--Left Textfield title and output
 	local ihHg_tf_label = display.newText( "Enter inHg",  display.contentCenterX * 1.5, display.contentCenterY * 0.45 ,
-	                    native.newFont( "Helvetica-Bold",25))
+	                    native.newFont( "Helvetica",25))
   sceneGroup:insert(ihHg_tf_label)
 	local hPaVal = display.newText( "hPa",  display.contentCenterX * 1.5, display.contentCenterY * 0.65 ,
-	                    native.newFont( "Helvetica-Bold",25))
+	                    native.newFont( "Helvetica",25))
 											sceneGroup:insert(hPaVal)
 	--Listener Function for the hpa->inhg Textfield
 	local function inHg_tfListener (event)
@@ -126,7 +126,7 @@ sceneGroup:insert(inHg_tf)
 ----------------------------------------------------------------------------------------------------------------------------
 ---Altitude title
 local altTitle = display.newText( "Altitude/Length Conversion",
-										display.contentCenterX, display.contentCenterY * 0.85, native.newFont( "Helvetica-Bold" ,30 ))
+										display.contentCenterX, display.contentCenterY * 0.85, native.newFont( "Helvetica" ,30 ))
 sceneGroup:insert(altTitle)
 ----------------------------------------------------------------------------------------------------------------------------
 --LEFT SIDE ft to meters
@@ -135,10 +135,10 @@ local ftTmt_tf --Textfiled to enter feet
 
 --Left Textfield title and output
 local ftTmt_label = display.newText( "Enter Feet",  display.contentCenterX * 0.5, display.contentCenterY * 0.95 ,
-										native.newFont( "Helvetica-Bold",25))
+										native.newFont( "Helvetica",25))
 sceneGroup:insert(ftTmt_label)
 local meterVal = display.newText( "meters",  display.contentCenterX * 0.5, display.contentCenterY * 1.15 ,
-										native.newFont( "Helvetica-Bold",25))
+										native.newFont( "Helvetica",25))
 sceneGroup:insert(meterVal)
 --Listener Function for the hpa->inhg Textfield
 local function ftTmt_Listener (event)
@@ -168,10 +168,10 @@ local mtTft_tf --Textfiled to enter feet
 
 --Left Textfield title and output
 local mtTft_label = display.newText( "Enter Meters",  display.contentCenterX * 1.5, display.contentCenterY * 0.95 ,
-										native.newFont( "Helvetica-Bold",25))
+										native.newFont( "Helvetica",25))
 sceneGroup:insert(mtTft_label)
 local feetVal = display.newText( "feet",  display.contentCenterX * 1.5, display.contentCenterY * 1.15 ,
-										native.newFont( "Helvetica-Bold",25))
+										native.newFont( "Helvetica",25))
 sceneGroup:insert(feetVal)
 --Listener Function for the hpa->inhg Textfield
 local function mtTft_Listener (event)
@@ -200,7 +200,7 @@ sceneGroup:insert(mtTft_tf)
 ----------------------------------------------------------------------------------------------------------------------------
 ---Altitude title
 local fuelTitle = display.newText( "Fuel Weight Conversion",
-										display.contentCenterX, display.contentCenterY * 1.35, native.newFont( "Helvetica-Bold" ,30 ))
+										display.contentCenterX, display.contentCenterY * 1.35, native.newFont( "Helvetica" ,30 ))
 sceneGroup:insert(fuelTitle)
 ----------------------------------------------------------------------------------------------------------------------------
 --LEFT SIDE kg to lbs
@@ -209,10 +209,10 @@ local kgTlbs_tf --Textfiled to enter feet
 
 --Left Textfield title and output
 local kgTlbs_label = display.newText( "Enter Kilograms",  display.contentCenterX * 0.5, display.contentCenterY * 1.45 ,
-										native.newFont( "Helvetica-Bold",25))
+										native.newFont( "Helvetica",25))
 sceneGroup:insert(kgTlbs_label)
 local lbsVal = display.newText( "lbs",  display.contentCenterX * 0.5, display.contentCenterY * 1.65 ,
-										native.newFont( "Helvetica-Bold",25))
+										native.newFont( "Helvetica",25))
 sceneGroup:insert(lbsVal)
 --Listener Function for the hpa->inhg Textfield
 local function kgTlbs_Listener (event)
@@ -242,10 +242,10 @@ local lbsTkg_tf --Textfiled to enter feet
 
 --Left Textfield title and output
 local lbsTkg_label = display.newText( "Enter Pounds",  display.contentCenterX * 1.5, display.contentCenterY * 1.45 ,
-										native.newFont( "Helvetica-Bold",25))
+										native.newFont( "Helvetica",25))
 sceneGroup:insert(lbsTkg_label)
 local kgVal = display.newText( "kilograms",  display.contentCenterX * 1.5, display.contentCenterY * 1.65 ,
-										native.newFont( "Helvetica-Bold",25))
+										native.newFont( "Helvetica",25))
 sceneGroup:insert(kgVal)
 --Listener Function for the hpa->inhg Textfield
 local function lbsTkg_Listener (event)
@@ -268,16 +268,19 @@ lbsTkg_tf = native.newTextField( display.contentCenterX * 1.5, display.contentCe
 lbsTkg_tf.inputType = "number"       --Set the type to only numbers. Should popup numaric keyboard
 lbsTkg_tf:addEventListener( "userInput", lbsTkg_Listener )    --Register the listener
 sceneGroup:insert(lbsTkg_tf)
+
+
 ----------------------------------------------------------------------------------------------------------------------------
 --Bottom button to return to main menu.
 ----------------------------------------------------------------------------------------------------------------------------
 buttonMenu = display.newRoundedRect(display.contentCenterX, display.contentCenterY*1.9,
-										display.contentWidth*0.5, display.contentHeight*0.075, 15 )
+	display.contentWidth*0.4, display.contentHeight*0.05, 15 )
 buttonMenu:setFillColor(0,0,1)
 sceneGroup:insert(buttonMenu)
 buttonMenu:addEventListener("tap", changeScenes)
 
-buttonConversionsLabel = display.newText( "Return to Menu",  display.contentCenterX, display.contentCenterY*1.9, native.newFont( "Helvetica" ,30 ))
+local buttonConversionsLabel = display.newText( "Return to Menu",  display.contentCenterX, display.contentCenterY*1.9,
+	native.newFont( "Helvetica" ,25 ))
 sceneGroup:insert(buttonConversionsLabel)
 
 end	--scene:create
