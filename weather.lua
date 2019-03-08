@@ -100,12 +100,38 @@ end		--updateClock(e)
 	                    display.contentCenterX, display.contentCenterY*0.075 , native.newFont( "Helvetica" ,35 ))
 	sceneGroup:insert(pageTitle)
 
-	displayMetar = display.newText( metarIs, display.contentCenterX, display.contentCenterY * 1.4, display.actualContentWidth*0.8,
-									display.actualContentHeight*0.4, native.systemFont,22)
+
+	local NoaaTextOpt = {text = "METAR and TAF information is courtesy of Aviation Weather Center - NOAA",
+		x = display.contentCenterX,
+		y = display.contentHeight * 0.9,
+		width = display.contentWidth*0.65,
+		font = native.systemFont,
+		fontSize = 16,
+		align = "center"
+	}
+	local NoaaText = display.newText( NoaaTextOpt )
+	sceneGroup:insert(NoaaText)
+
+	local displayMetarOpt = { text = metarIs,
+							x = display.contentCenterX,
+							y = display.contentHeight * 0.55,
+							width = display.actualContentWidth*0.8,
+							font = native.systemFont,
+							fontSize = 22,
+							align = "center"
+			}
+	displayMetar = display.newText( displayMetarOpt )
 	sceneGroup:insert(displayMetar)
 
-	displayTaf = display.newText( tafIs, display.contentCenterX, display.contentCenterY * 1.7, display.actualContentWidth*0.8,
-									display.actualContentHeight*0.4, native.systemFont,22)
+	local displayTafOpt = { text = tafIs,
+		x = display.contentCenterX,
+		y = display.contentHeight * 0.70,
+		width = display.actualContentWidth*0.8,
+		font = native.systemFont,
+		fontSize = 22,
+		align = "center"
+	}
+	displayTaf = display.newText( displayTafOpt )
 	sceneGroup:insert(displayTaf)
 
 
@@ -134,9 +160,9 @@ local function onDownloadMetar ( event )
 
 			end
 	end
-end
+--end
 
-	local function onDownloadTaf ( event )
+--	local function onDownloadTaf ( event )
 		if (event.action == "clicked") then
 			local i = event.index
 			if (i == 2) then
@@ -163,44 +189,53 @@ end
 	end
 
 local function popRequest ()
-	metarAlert = native.showAlert( "METAR", "Do you want to download METAR data file (~ 1 MB)?" , { "Download", "Cancel"}, onDownloadMetar )
+	metarAlert = native.showAlert( "Permission", "Do you want to download WEATHER data file (~ 8 MB)?" , { "Download", "Cancel"}, onDownloadMetar )
 end
 
-local function popRequestTaf()
-	tafAlert = native.showAlert( "TAF", "Do you want to download TAF data file (~ 6 MB)?" , { "Download", "Cancel"}, onDownloadTaf )
-end
-	metarDown = display.newRoundedRect( display.contentCenterX, display.contentCenterY*0.25, display.contentWidth*0.5, display.contentHeight*0.05, 15 )
+--local function popRequestTaf()
+--	tafAlert = native.showAlert( "TAF", "Do you want to download TAF data file (~ 6 MB)?" , { "Download", "Cancel"}, onDownloadTaf )
+--end
+
+	local optdownloadMetar = {text = "Press the button below to download the latest available WEATHER data",
+				  	x = display.contentCenterX,
+					y=display.contentCenterY * 0.32,
+					width = display.contentWidth*0.50,
+					font = native.systemFont,
+					fontSize = 18,
+					align = "center"
+	}
+	local downloadMetarText = display.newText( optdownloadMetar )
+	sceneGroup:insert(downloadMetarText)
+
+	local fileSizeOpt = {text = "NOTE: 2 files will be downloaded, with total size about 8 MB.",
+		x = display.contentCenterX,
+		y=display.contentCenterY * 0.55,
+		width = display.contentWidth*0.65,
+		font = native.systemFont,
+		fontSize = 16,
+		align = "center"
+	}
+	local fileSizeText = display.newText( fileSizeOpt )
+	sceneGroup:insert(fileSizeText)
+
+
+
+	metarDown = display.newRoundedRect( display.contentCenterX, display.contentCenterY*0.45, display.contentWidth*0.5,
+		display.contentHeight*0.05, 15 )
 	metarDown:setFillColor(0.5,0.5,1)
 
 	metarDown:addEventListener("tap", popRequest)	--Run the function to get the freaking metars!
 
 	sceneGroup:insert(metarDown)
 
-	tafdown = display.newRoundedRect( display.contentCenterX, display.contentCenterY*0.50, display.contentWidth*0.5, display.contentHeight*0.05, 15 )
-	tafdown:setFillColor(0.5,0.5,1)
 
-	tafdown:addEventListener("tap", popRequestTaf)
-
-	sceneGroup:insert(tafdown)
-	----------------------------------------------------------------------------------------------------------------------------
-	--network stuff
-	----------------------------------------------------------------------------------------------------------------------------
-
-
---end
-
-
-	----------------------------------------------------------------------------------------------------------------------------
-	--network stuff
-	----------------------------------------------------------------------------------------------------------------------------
-
-	local metarDownLabel = display.newText( "GET METAR DATA", display.contentCenterX, display.contentCenterY * 0.25,
+	local metarDownLabel = display.newText( "GET WEATHER DATA", display.contentCenterX, display.contentCenterY * 0.45,
  												native.newFont( "Helvetica" ,25 ))
 	sceneGroup:insert(metarDownLabel)
 
-	local tafDownLabel = display.newText( "GET TAF DATA", display.contentCenterX, display.contentCenterY * 0.5,
- 												native.newFont( "Helvetica" ,25 ))
-	sceneGroup:insert(tafDownLabel)
+--	local tafDownLabel = display.newText( "GET TAF DATA", display.contentCenterX, display.contentCenterY * 0.5,
+-- 												native.newFont( "Helvetica" ,25 ))
+--	sceneGroup:insert(tafDownLabel)
 
 
 	local downPerc = display.newText( "", display.contentCenterX, display.contentCenterY * 0.66, native.newFont( "Helvetica" ,20 ) )
@@ -232,14 +267,11 @@ end
 	timer.performWithDelay( 250, downProgBar, 0 )
 
 
-	local downloadMetarText = display.newText( "Press the button to download METAR data file", display.contentCenterX, display.contentCenterY * 0.34,
-	                    native.newFont( "Helvetica" ,18 ))
-	sceneGroup:insert(downloadMetarText)
 
-	local downloadTafText = display.newText( "Press the button to download TAF data file", display.contentCenterX, display.contentCenterY * 0.59,
-		native.newFont( "Helvetica" ,18 ))
-	sceneGroup:insert(downloadTafText)
-
+--	local downloadTafText = display.newText( "Press the button to download TAF data file", display.contentCenterX, display.contentCenterY * 0.59,
+--		native.newFont( "Helvetica" ,18 ))
+--	sceneGroup:insert(downloadTafText)
+--
 
 	local arptID_label2 = display.newText( "Enter Airport's ICAO code", display.contentCenterX, display.contentCenterY * 0.8,
 	                    native.newFont( "Helvetica" ,25 ))
@@ -295,7 +327,6 @@ end
 						fileTaf:close()
 						displayTaf.text = tafIs
 					end
-
 
 
 	    elseif ( event.phase == "editing" ) then

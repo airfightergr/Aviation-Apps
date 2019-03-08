@@ -147,7 +147,7 @@ local function ftTmt_Listener (event)
 	elseif ( event.phase == "ended" or event.phase == "submitted" ) then
 		print(event.target.text)  --event.target.text is the Output resulting text from "defaultField"
 		--Let's change the output label with the new value
-		meterVal.text = string.format("%d meters", tonumber((event.target.text)) * 0.3048)
+		meterVal.text = string.format("%.1f meters", tonumber((event.target.text)) * 0.3048)
 	elseif ( event.phase == "editing" ) then
 			print( event.newCharacters )
 			print( event.oldText )
@@ -180,7 +180,7 @@ local function mtTft_Listener (event)
 	elseif ( event.phase == "ended" or event.phase == "submitted" ) then
 		print(event.target.text)  --event.target.text is the Output resulting text from "defaultField"
 		--Let's change the output label with the new value
-		feetVal.text = string.format("%d feet", tonumber((event.target.text)) / 0.3048)
+		feetVal.text = string.format("%.1f feet", tonumber((event.target.text)) / 0.3048)
 	elseif ( event.phase == "editing" ) then
 			print( event.newCharacters )
 			print( event.oldText )

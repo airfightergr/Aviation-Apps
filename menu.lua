@@ -117,7 +117,7 @@ function scene:create( event )
 --------------------------------------------------------------------------------
 --TESTS
 --------------------------------------------------------------------------------
-local bottomTitle = display.newText( "Do not use in Real Life Aviation", display.contentCenterX, display.contentHeight * 0.83, native.newFont( "Helvetica" , 20 ))
+local bottomTitle = display.newText( "Do not use in Real Aviation", display.contentCenterX, display.contentHeight * 0.83, native.newFont( "Helvetica" , 20 ))
 	bottomTitle:setFillColor(1,0.2,0.2)
 sceneGroup:insert(bottomTitle)
 

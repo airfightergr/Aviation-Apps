@@ -90,8 +90,20 @@ function scene:create( event )
     --App title
     title = display.newText( "AIRPORT DATA", dwidthC, dheighC * 0.075, native.newFont( "Helvetica" ,40 ))
     sceneGroup:insert(title)
+
+    local sourceTextOpt = {text = "Airport Information is courtesy of OurAirports.com",
+        x = dwidthC,
+        y = dheigh * 0.9,
+        width = dwidth*0.65,
+        font = native.systemFont,
+        fontSize = 16,
+        align = "center"
+    }
+    local sourceText = display.newText( sourceTextOpt )
+    sceneGroup:insert(sourceText)
+
     ----------------------------------------------------------------------------------------------------------------------------
-    -- Bottom time display
+    -- time display
     ----------------------------------------------------------------------------------------------------------------------------
     --Create a new text to display the time
     local UTC_time = display.newText( "", dwidthC, dheighC * 0.15)
@@ -199,9 +211,19 @@ function scene:create( event )
                 end
 
                 file:close()
-                displayArptData.text = string.sub(arptData[1],1, -2) .. " \n" .. string.sub(arptData[3], 2, -2) ..
-                        "\n" .. string.format("Elevetion: %d ft\n", arptData[6]) .. string.format("Latitude: %8.6f\n", arptData[4]) ..
+
+            if #arptData < 2 then
+                displayArptData.text = "Airport Not Found.\nPlease check that you have enetered a valid ICAO code."
+
+            else
+
+                displayArptData.text = string.sub(arptData[1],1, -2) .. "  " .. string.sub(arptData[10],2, -2) .. ", " .. string.sub(arptData[8],2, -2) .." \n" ..
+                                string.sub(arptData[3], 2, -2) .. "\n" ..
+                        string.format("Elevetion: %d ft\n", arptData[6]) ..
+                                string.format("Latitude: %8.6f\n", arptData[4]) ..
                         string.format("Longitude: %8.6f\n", arptData[5])
+            end
+
             end --if not file
 
 
