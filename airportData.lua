@@ -19,7 +19,7 @@ local bg
 local title
 local buttonMenu
 
-local percdown
+local percDown
 local percText = ""
 
 local arptID
@@ -27,6 +27,8 @@ local arptDataIs = "Airport Data will be displayed here."
 local arptData = {}
 local rwyDataIs = ""
 local rwyData = {}
+local NorthSouth = ""
+local EastWest = ""
 
 local dwidth = display.contentWidth
 local dheigh = display.contentHeight
@@ -191,9 +193,43 @@ function scene:create( event )
     local dataDownLabel = display.newText( "GET AIRPORT DATA", dwidthC, dheighC * 0.25, native.newFont( "Helvetica" , 22 ))
     sceneGroup:insert(dataDownLabel)
 
-    local displayArptData = display.newText( arptDataIs, dwidthC, dheighC * 1.2, display.actualContentWidth*0.8,
+    local displayArptData = display.newText( arptDataIs, dwidthC, dheighC * 1.1, display.actualContentWidth*0.8,
         display.actualContentHeight*0.4, native.systemFont,22)
     sceneGroup:insert(displayArptData)
+
+
+    ----------------------------------------------------------------------------------------------------------------------------
+    --Download Bar
+    ----------------------------------------------------------------------------------------------------------------------------
+
+    local downPerc = display.newText( "", dwidthC, dheigh * 0.18, native.newFont( "Helvetica" ,20 ) )
+    sceneGroup:insert(downPerc)
+
+    local function downloadPerc(e)
+        downPerc.text = percText
+    end
+    timer.performWithDelay( 250, downloadPerc, 0 )
+
+    local function downProgBar(e)
+        if percDown == nil then percDown = 0 end
+        if percText ~= "Download finished" then
+            local progrBar = display.newRect(dwidthC * 0.4, dheigh * 0.21,
+                dwidth * 0.6 * percDown, dheigh * 0.022)
+            progrBar.anchorX = 0
+            progrBar:setFillColor(1,0,0)
+            sceneGroup:insert(progrBar)
+        else
+            local progrBar = display.newRect(dwidthC * 0.4, dheigh * 0.21,
+                dwidth * 0.6, dheigh * 0.022)
+            progrBar.anchorX = 0
+            progrBar:setFillColor(0,1,0)
+            sceneGroup:insert(progrBar)
+        end
+
+    end
+
+    timer.performWithDelay( 250, downProgBar, 0 )
+
 
     ----------------------------------------------------------------------------------------------------------------------------
     --Get airport ID
@@ -279,22 +315,26 @@ function scene:create( event )
 
             end --if not airportfile
 
-            if #arptData < 2 or #arptID.text < 4 then
-                displayArptData.text = "Airport Not Found.\nPlease make sure that you have enetered a valid ICAO code."
+        if #arptData < 2 or #arptID.text < 4 then
+            displayArptData.text = "Airport Not Found.\nPlease make sure that you have enetered a valid ICAO code."
 
-            else
+        else
 
-                displayArptData.text = string.sub(arptData[1],1, -2) .. "  " .. string.sub(arptData[10],2, -2) .. ", " .. string.sub(arptData[8],2, -2) .." \n" ..
-                        string.sub(arptData[3], 2, -2) .. "\n" ..
-                        "IATA code: " .. string.sub(arptData[13], 2, -2) .. "\n" ..
-                        string.format("Elevetion: %d ft\n", arptData[6]) ..
-                        string.format("Latitude: %8.6f\n", arptData[4]) ..
-                        string.format("Longitude: %8.6f\n", arptData[5]) ..
-                        "\nRUNWAYS\n" ..
-                        string.sub(rwyData[7], 2, -2) .. "/" .. string.sub(rwyData[13], 2, -2) ..": " ..
-                        "HDG: " .. rwyData[11] .. "/" .. rwyData[17] .. ", Length: " .. rwyData[2] .. ", " ..
-                        string.sub(rwyData[4], 2, -2)
-            end
+            if tonumber(arptData[4]) >= 0 then NorthSouth = "N" else NorthSouth = "S" end
+            if tonumber(arptData[5]) >= 0 then EastWest = "E" else EastWest = "W" end
+
+            displayArptData.text =                                          --1st line: ICAO, City, Country Code
+            string.sub(arptData[1],1, -2) .. "  " .. string.sub(arptData[10],2, -2) .. ", " .. string.sub(arptData[8],2, -2) .." \n" ..
+            string.sub(arptData[3], 2, -2) .. "\n" ..                       --Airport Name
+            "IATA code: " .. string.sub(arptData[13], 2, -2) .. "\n" ..     --IATA code
+            string.format("Elevetion: %d ft\n", arptData[6]) ..             --Arpt Elevetion
+            string.format("Latitude: %s%8.6f\n", NorthSouth, arptData[4]) ..              --Arpt Lat
+            string.format("Longitude: %s%010.6f\n", EastWest, math.abs(arptData[5])) ..             --Arpt Long
+            "\nRUNWAYS\n" ..                                                --Runways header
+            string.sub(rwyData[7], 2, -2) .. "/" .. string.sub(rwyData[13], 2, -2) ..": " ..
+            "HDG: " .. rwyData[11] .. "/" .. rwyData[17] .. ", Length: " .. rwyData[2] .. ", " ..
+            string.sub(rwyData[4], 2, -2)
+        end
 
 
 
