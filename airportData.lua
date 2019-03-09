@@ -25,6 +25,8 @@ local percText = ""
 local arptID
 local arptDataIs = "Airport Data will be displayed here."
 local arptData = {}
+local rwyDataIs = ""
+local rwyData = {}
 
 local dwidth = display.contentWidth
 local dheigh = display.contentHeight
@@ -130,7 +132,7 @@ function scene:create( event )
 
             elseif ( i == 1 ) then
 
-                local urlMetar = 'http://ourairports.com/data/airports.csv'
+                local urlAirports = 'http://ourairports.com/data/airports.csv'
 
                 local params = {}
 
@@ -143,10 +145,35 @@ function scene:create( event )
                     baseDirectory = system.DocumentsDirectory
                 }
 
-                network.request( urlMetar, "GET", networkListener,  params )
+                network.request( urlAirports, "GET", networkListener,  params )
 
             end
         end
+
+        if (event.action == "clicked") then
+            local i = event.index
+            if (i == 2) then
+
+            elseif ( i == 1 ) then
+
+                local urlRunways = 'http://ourairports.com/data/runways.csv'
+
+                local params = {}
+
+                -- Tell network.request() that we want the "began" and "progress" events:
+                params.progress = "download"
+
+                -- Tell network.request() that we want the output to go to a file:
+                params.response = {
+                    filename = "runways.txt",
+                    baseDirectory = system.DocumentsDirectory
+                }
+
+                network.request( urlRunways, "GET", networkListener,  params )
+
+            end
+        end
+
     end
 
 
@@ -190,42 +217,84 @@ function scene:create( event )
             print( event.target.text )
             keyFocus = 1
             print("focus is "..keyFocus)
-
+            ----------------------------------------------------------------------------------------------------------------------------
+            --Read airport file.
+            ----------------------------------------------------------------------------------------------------------------------------
             local airportPath = system.pathForFile("airport.txt", system.DocumentsDirectory)
 
-            local file = io.open( airportPath, "r" )
+            local airportfile = io.open( airportPath, "r" )
 
-            if not file then print("Airport file error" )
+            if not airportfile then print("Airport file error" )
             else
-                local content = file:read'*a'
-                local content_a = string.match( content, string.upper(arptID.text) .. ".-\n" )
-                if not content_a then content_a = "Airport not found"
+                local airportfilecontent = airportfile:read'*a'
+                local airportfilecontent_a = string.match( airportfilecontent, string.upper(arptID.text) .. ".-\n" )
+                if not airportfilecontent_a then airportfilecontent_a = "Airport not found"
                     print("Airport DATA N/A")
                 end --if not content_a
-                arptDataIs = string.sub(content_a, 1, -2)
+                arptDataIs = string.sub(airportfilecontent_a, 1, -2)
                 print(arptDataIs)
 
-                arptData = content_a:split(",")
+                arptData = airportfilecontent_a:split(",")
                 for i=1, #arptData do
                     print(arptData[i])
                 end
 
-                file:close()
+                airportfile:close()
+            end --if not airportfile
 
-            if #arptData < 2 then
-                displayArptData.text = "Airport Not Found.\nPlease check that you have enetered a valid ICAO code."
+            ----------------------------------------------------------------------------------------------------------------------------
+            --Read runway file.
+            ----------------------------------------------------------------------------------------------------------------------------
+            local rwyPath = system.pathForFile("runways.txt", system.DocumentsDirectory)
+
+            local rwyfile = io.open( rwyPath, "r" )
+
+            if not rwyfile then print("Airport file error" )
+            else
+                local rwyfilecontent = rwyfile:read'*a'
+                local rwyfilecontent_a = string.match( rwyfilecontent, string.upper(arptID.text) .. ".-\n" )
+                if not rwyfilecontent_a then rwyfilecontent_a = "Airport not found"
+                    print("Airport DATA N/A")
+                end --if not content_a
+                rwyDataIs = string.sub(rwyfilecontent_a, 1, -2)
+                print(rwyDataIs)
+
+                rwyData = rwyfilecontent_a:split(",")
+                for i=1, #rwyData do
+                    print(rwyData[i])
+                end
+
+                rwyfile:close()
+                local i = 0
+                local tf = {}
+                while true do
+                     i = string.find(rwyfilecontent, string.upper(arptID.text), i+1)
+                    if i == nil then break end
+                   table.insert(tf, i)
+                    print("Found at " .. i)
+                end
+                print(#tf)
+
+
+
+            end --if not airportfile
+
+            if #arptData < 2 or #arptID.text < 4 then
+                displayArptData.text = "Airport Not Found.\nPlease make sure that you have enetered a valid ICAO code."
 
             else
 
                 displayArptData.text = string.sub(arptData[1],1, -2) .. "  " .. string.sub(arptData[10],2, -2) .. ", " .. string.sub(arptData[8],2, -2) .." \n" ..
-                                string.sub(arptData[3], 2, -2) .. "\n" ..
+                        string.sub(arptData[3], 2, -2) .. "\n" ..
+                        "IATA code: " .. string.sub(arptData[13], 2, -2) .. "\n" ..
                         string.format("Elevetion: %d ft\n", arptData[6]) ..
-                                string.format("Latitude: %8.6f\n", arptData[4]) ..
-                        string.format("Longitude: %8.6f\n", arptData[5])
+                        string.format("Latitude: %8.6f\n", arptData[4]) ..
+                        string.format("Longitude: %8.6f\n", arptData[5]) ..
+                        "\nRUNWAYS\n" ..
+                        string.sub(rwyData[7], 2, -2) .. "/" .. string.sub(rwyData[13], 2, -2) ..": " ..
+                        "HDG: " .. rwyData[11] .. "/" .. rwyData[17] .. ", Length: " .. rwyData[2] .. ", " ..
+                        string.sub(rwyData[4], 2, -2)
             end
-
-            end --if not file
-
 
 
 

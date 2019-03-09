@@ -160,9 +160,7 @@ local function onDownloadMetar ( event )
 
 			end
 	end
---end
 
---	local function onDownloadTaf ( event )
 		if (event.action == "clicked") then
 			local i = event.index
 			if (i == 2) then
